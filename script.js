@@ -69,7 +69,7 @@ function skip() {
 }
 // upgrading lifeline by shoing ad
 function upd() {
-    if (liflines < 6) {
+    if (liflines < 5) {
         let timerInterval
         Swal.fire({
             title: 'Dont Close',
@@ -94,6 +94,9 @@ function upd() {
                 })
             }
         })
+    }
+    else{
+        Swal.fire('You Still Have Them', 'You can only use this option once your lifeline gets below 5', 'info')
     }
 }
 // checking over time
