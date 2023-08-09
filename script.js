@@ -29,28 +29,30 @@ function check(ans) {
 
             if (document.getElementById("answer").value.length > 0) {
                 if (document.getElementById("answer").value == ans) {
-                    alert("Correct")
                     liflines = Number(liflines) + 1
                     localStorage.setItem("lifelines", liflines)
-                    location.reload()
+                    Swal.fire('Correct Answer', '', 'success').then(()=>{
+                        location.reload()
+                    })
                 }
                 else {
-                    alert("Wrong")
                     liflines -= 1
                     localStorage.setItem("lifelines", liflines)
-                    location.reload()
+                    Swal.fire('Wrong', `The Correct answer was ${eval(ans)}`, 'error').then(()=>{
+                        location.reload()
+                    })
                 }
             }
             else {
-                alert("Type something")
+                Swal.fire('Type Something', '', 'info')
             }
         }
         else {
-            alert("Time Over")
+            Swal.fire('Time is Over', '', 'info')
         }
     }
     else {
-        alert("No More lifelines Get some by watching ad")
+        Swal.fire('Life Lines Finished', 'Got no more Life line Get some by watching ad', 'info')
     }
 }
 // adding skip functionality
@@ -61,41 +63,46 @@ function skip() {
         location.reload()
     }
     else {
-        alert("No More lifelines Get some by watching ad")
+        Swal.fire('Life Lines Finished', 'Got no more Life line Get some by watching ad', 'info')
+
     }
 }
 // upgrading lifeline by shoing ad
 function upd() {
-    let timerInterval
-    Swal.fire({
-        title: 'Dont Close',
-        html: 'You will be rewarded in <b></b> seconds.',
-        timer: 2000,
-        timerProgressBar: true,
-        didOpen: () => {
-            Swal.showLoading()
-            const b = Swal.getHtmlContainer().querySelector('b')
-            timerInterval = setInterval(() => {
-                b.textContent = Swal.getTimerLeft() / 1000
-            }, 100)
-        },
-        willClose: () => {
-            clearInterval(timerInterval)
-        }
-    }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.timer) {
-            localStorage.setItem("lifelines", 10)
-            console.log('I was closed by the timer')
-            location.reload()
-        }
-    })
+    if (liflines < 6) {
+        let timerInterval
+        Swal.fire({
+            title: 'Dont Close',
+            html: 'You will be rewarded in <b></b> seconds.',
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading()
+                const b = Swal.getHtmlContainer().querySelector('b')
+                timerInterval = setInterval(() => {
+                    b.textContent = Swal.getTimerLeft() / 1000
+                }, 100)
+            },
+            willClose: () => {
+                clearInterval(timerInterval)
+            }
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                localStorage.setItem("lifelines", 10)
+                Swal.fire('+10', 'Life line increased successfully', 'success').then(() => {
+                    location.reload()
+                })
+            }
+        })
+    }
 }
 // checking over time
 function checkTime() {
     if (time <= 0) {
         time = 30
-        alert("Time Over")
-        location.reload()
+        Swal.fire('Time is Over', '', 'info').then(() => {
+            location.reload()
+        })
     }
 }
 setInterval(checkTime, 1000)
